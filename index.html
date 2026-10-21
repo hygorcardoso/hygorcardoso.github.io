@@ -646,6 +646,7 @@
     let modoPesquisa = "rapida";          
     let hereApiKey = localStorage.getItem('cfg_here_key') || "";
     let mapboxToken = localStorage.getItem('cfg_mapbox_key') || "";
+    let cancelarGeocodificacaoFlag = false;
 
     const CENTROIDES_ESTADOS_BR = {
       "AC": [-8.77, -70.55], "AL": [-9.71, -35.73], "AM": [-3.07, -61.66],
@@ -685,6 +686,40 @@
     let marcadorAbertoPorClique = null;
     let buscaDebounceTimer = null;
     let cancelarGeocodificacaoFlag = false;
+
+    function validarBaseCidades() {
+
+    if (!window.BASE_CIDADES_BRASIL) {
+        alert(
+            "❌ Erro: base de cidades não carregada."
+        );
+
+        throw new Error(
+            "BASE_CIDADES_BRASIL indefinida."
+        );
+    }
+
+    const total = Object.keys(
+        window.BASE_CIDADES_BRASIL
+    ).length;
+
+    if (total === 0) {
+
+        alert(
+            "❌ Erro: base de cidades vazia."
+        );
+
+        throw new Error(
+            "BASE_CIDADES_BRASIL vazia."
+        );
+    }
+
+    console.log(
+        `✅ ${total} cidades carregadas`
+    );
+
+    return true;
+}
 
     function initMap() {
       if (!map) {
@@ -1638,6 +1673,7 @@
       atualizarFiltroRegiaoPorEstado();
     });
 
+    validarBaseCidades();
     initMap();
   </script>
 </body>
